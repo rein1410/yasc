@@ -1,0 +1,35 @@
+services:
+  cassandra:
+    build:
+      context: cassandra
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    ports:
+      - 9042:9042
+    environment:
+      - CASSANDRA_USER=nestjs
+      - CASSANDRA_PASSWORD=sW4RbcNxE467KXU+uCdTwJCD39IZvIQV
+    networks:
+      - nestjs_network
+
+  mongo1:
+    image: mongo
+    restart: unless-stopped
+    volumes:
+      - nestjs_mongo_data1:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=nestjs
+      - MONGO_INITDB_ROOT_PASSWORD=supersecret
+    networks:
+      - nestjs_network
+
+networks:
+  nestjs_network:
+    name: nestjs_network
+
+volumes:
+  nestjs_mongo_data1:
+    name: nestjs_mongo_data1
+  cassandra_data:

@@ -2,19 +2,36 @@ syntax = "proto3";
 
 package user;
 
-message User {
-    string id = 1;
-    string email = 2;
-    string username = 3;
-    string profilePicture = 4;
+message pUser {
+  string id = 1;
+  string email = 2;
+  string username = 3;
+  string profilePicture = 4;
 }
 
-service UserService {
-  rpc FindOne (UserById) returns (User) {}
+message pUsers {
+  repeated pUser data = 1;
+  int32 total = 2;
+  int32 skip = 3;
+  int32 limit = 4;
+}
+
+message pUserPaginationDto  {
+  int32 limit = 1;
+  int32 skip = 2;
+}
+
+service UsersService {
+  rpc find(pUserPaginationDto) returns (pUsers) {}
+  rpc findOne(pUserById) returns (pUser) {}
+  rpc create(pCreateUserDto) returns (pUser) {}
 }
 
 
-message UserById {
-    string id = 1;
+message pCreateUserDto {
+  string email = 1;
+  string username = 2;
+  string password = 3;
 }
 
+message pUserById { string id = 1; }

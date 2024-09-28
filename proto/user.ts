@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.0
 //   protoc               v5.27.1
-// source: apps/auth/src/proto/user.proto
+// source: proto/user.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
@@ -10,40 +10,66 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "user";
 
-export interface User {
+export interface pUser {
   id: string;
   email: string;
   username: string;
   profilePicture: string;
 }
 
-export interface UserById {
+export interface pUsers {
+  data: pUser[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
+export interface pUserPaginationDto {
+  limit: number;
+  skip: number;
+}
+
+export interface pCreateUserDto {
+  email: string;
+  username: string;
+  password: string;
+}
+
+export interface pUserById {
   id: string;
 }
 
 export const USER_PACKAGE_NAME = "user";
 
-export interface UserServiceClient {
-  findOne(request: UserById): Observable<User>;
+export interface UsersServiceClient {
+  find(request: pUserPaginationDto): Observable<pUsers>;
+
+  findOne(request: pUserById): Observable<pUser>;
+
+  create(request: pCreateUserDto): Observable<pUser>;
 }
 
-export interface UserServiceController {
-  findOne(request: UserById): Promise<User> | Observable<User> | User;
+export interface UsersServiceController {
+  find(request: pUserPaginationDto): Promise<pUsers> | Observable<pUsers> | pUsers;
+
+  findOne(request: pUserById): Promise<pUser> | Observable<pUser> | pUser;
+
+  create(request: pCreateUserDto): Promise<pUser> | Observable<pUser> | pUser;
 }
 
-export function UserServiceControllerMethods() {
+export function UsersServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["findOne"];
+    const grpcMethods: string[] = ["find", "findOne", "create"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("UsersService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("UsersService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const USER_SERVICE_NAME = "UserService";
+export const USERS_SERVICE_NAME = "UsersService";

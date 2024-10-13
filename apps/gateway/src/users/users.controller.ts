@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, OnModuleInit, Inject, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, OnModuleInit, Inject, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/user';
 import { ClientGrpc } from '@nestjs/microservices';
 import { CreateUserDto, UpdateUserDto, UserPaginationDto } from './dto';
+import { User } from 'apps/users/src/schemas/user.schema';
+import { map } from 'rxjs';
 
 @Controller('users')
 @ApiTags('users')
@@ -22,13 +24,19 @@ export class UsersController implements OnModuleInit{
     return this.usersService.create(createUserDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  find(@Query() dto: UserPaginationDto) {
-    return this.usersService.find(dto);
+  async find(@Query() dto: UserPaginationDto) {
+    return this.usersService.find(dto).pipe(
+      map(v => {
+        if (v.data === undefined) v.data = [];
+        return v
+      })
+    )
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.usersService.findOne({ id });
   }
 

@@ -1,21 +1,28 @@
-import { Controller, Get } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { pCreateUserDto, pUser, pUserById, pUserPaginationDto, pUsers, UsersServiceController, UsersServiceControllerMethods } from 'proto/user';
+import { pCreateUserDto, pUser, pUserByEmail, pUserById, pUserPaginationDto, pUsers, UsersServiceController, UsersServiceControllerMethods } from 'proto/user';
 import { Observable } from 'rxjs';
 import { GrpcMethod } from '@nestjs/microservices';
+import { User } from './schemas/user.schema';
+import { plainToInstance } from 'class-transformer';
 
 @Controller()
 @UsersServiceControllerMethods()
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController implements UsersServiceController {
   constructor(private readonly userService: UsersService) {}
+
+  findOneByEmail(request: pUserByEmail): Promise<pUser> | Observable<pUser> | pUser {
+    return this.userService.findOneByEmail(request);
+  }
 
   async find(request: pUserPaginationDto): Promise<pUsers> {
     const users = await this.userService.find(request);
     return {
-      data: users,
+      data: plainToInstance(User, users),
       total: users.length,
-      skip: request.skip,
-      limit: request.limit
+      skip: request.skip === undefined ? 0 : request.skip,
+      limit: request.limit === undefined ? 0 : request.limit
     }
   }
 
@@ -23,8 +30,9 @@ export class UsersController implements UsersServiceController {
     return this.userService.create(request); 
   }
 
-  findOne(request: pUserById): Promise<pUser> | Observable<pUser> | pUser {
-    return this.userService.findOne(request);
+  async findOne(request: pUserById): Promise<pUser> {
+    const res = await this.userService.findOne(request);
+    return plainToInstance(User, res);
   }
 
 }

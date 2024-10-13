@@ -13,6 +13,7 @@ export const protobufPackage = "user";
 export interface pUser {
   id: string;
   email: string;
+  password: string;
   username: string;
   profilePicture: string;
 }
@@ -39,12 +40,18 @@ export interface pUserById {
   id: string;
 }
 
+export interface pUserByEmail {
+  email: string;
+}
+
 export const USER_PACKAGE_NAME = "user";
 
 export interface UsersServiceClient {
   find(request: pUserPaginationDto): Observable<pUsers>;
 
   findOne(request: pUserById): Observable<pUser>;
+
+  findOneByEmail(request: pUserByEmail): Observable<pUser>;
 
   create(request: pCreateUserDto): Observable<pUser>;
 }
@@ -54,12 +61,14 @@ export interface UsersServiceController {
 
   findOne(request: pUserById): Promise<pUser> | Observable<pUser> | pUser;
 
+  findOneByEmail(request: pUserByEmail): Promise<pUser> | Observable<pUser> | pUser;
+
   create(request: pCreateUserDto): Promise<pUser> | Observable<pUser> | pUser;
 }
 
 export function UsersServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["find", "findOne", "create"];
+    const grpcMethods: string[] = ["find", "findOne", "findOneByEmail", "create"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UsersService", method)(constructor.prototype[method], method, descriptor);

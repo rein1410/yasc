@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {  pCreateUserDto, pUserById, pUserPaginationDto, UsersServiceClient } from 'proto/user';
+import {  pCreateUserDto, pUserByEmail, pUserById, pUserPaginationDto, UsersServiceClient } from 'proto/user';
 import { Observable } from 'rxjs';
 import { User } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, Query } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +14,10 @@ export class UsersService {
     return this.userModel.create(request);
   }
   async findOne(request: pUserById): Promise<User> {
+    return this.userModel.findOne({ _id: request.id }).exec();
+  }
+
+  async findOneByEmail(request: pUserByEmail): Promise<User> {
     return this.userModel.findOne(request);
   }
 

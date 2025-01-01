@@ -1,0 +1,38 @@
+services:
+  traefik:
+    image: traefik:v3.2
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  mongo1:
+    image: mongo
+    hostname: mongo1
+    restart: unless-stopped
+    volumes:
+      - nestjs_mongo_data1:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=nestjs
+      - MONGO_INITDB_ROOT_PASSWORD=supersecret
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["./dist/apps/gateway/main.js"]
+    image: nestjs-backend
+    restart: unless-stopped
+    networks:
+      - nestjs_network
+    deploy:
+      labels:
+        - traefik.http.routers.backend.rule=Host(`backend.localhost`)
+        - traefik.http.services.m-backend.loadbalancer.server.port=3000
+
+volumes:
+  nestjs_mongo_data1:
+    name: nestjs_mongo_data1
+  cassandra_data:

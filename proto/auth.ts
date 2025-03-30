@@ -25,11 +25,6 @@ export interface pRegisterDto {
   password: string;
 }
 
-export interface pUserPaginationDto {
-  limit: number;
-  skip: number;
-}
-
 export const AUTH_PACKAGE_NAME = "auth";
 
 export interface AuthServiceClient {

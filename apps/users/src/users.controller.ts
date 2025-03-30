@@ -4,10 +4,11 @@ import { pCreateUserDto, pUser, pUserByEmail, pUserById, pUserPaginationDto, pUs
 import { Observable } from 'rxjs';
 import { User } from './schemas/user.schema';
 import { plainToInstance } from 'class-transformer';
+import MongooseClassSerializerInterceptor from '@app/common/mongoose-class-serializer.interceptor';
 
 @Controller()
 @UsersServiceControllerMethods()
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UsersController implements UsersServiceController {
   constructor(private readonly userService: UsersService) {}
 

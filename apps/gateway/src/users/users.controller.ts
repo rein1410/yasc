@@ -1,22 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, OnModuleInit, Inject, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  OnModuleInit,
+  Inject,
+  Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/users';
+import {
+  USER_PACKAGE_NAME,
+  USERS_SERVICE_NAME,
+  UsersServiceClient,
+} from 'proto/users';
 import { ClientGrpc } from '@nestjs/microservices';
 import { CreateUserDto, UpdateUserDto, UserPaginationDto } from './dto';
-import { User } from 'apps/users/src/schemas/user.schema';
 import { map } from 'rxjs';
 
 @Controller('users')
 @ApiTags('users')
-export class UsersController implements OnModuleInit{
-  private  usersService: UsersServiceClient;
+export class UsersController implements OnModuleInit {
+  private usersService: UsersServiceClient;
 
-  constructor(@Inject("USER_PACKAGE") private usersClient: ClientGrpc) {}
+  constructor(@Inject(USER_PACKAGE_NAME) private usersClient: ClientGrpc) {}
 
   onModuleInit() {
-    this.usersService = this.usersClient.getService<UsersServiceClient>(
-      USERS_SERVICE_NAME
-    );
+    this.usersService =
+      this.usersClient.getService<UsersServiceClient>(USERS_SERVICE_NAME);
   }
 
   @Post()
@@ -24,15 +39,9 @@ export class UsersController implements OnModuleInit{
     return this.usersService.create(createUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async find(@Query() dto: UserPaginationDto) {
-    return this.usersService.find(dto).pipe(
-      map(v => {
-        if (v.data === undefined) v.data = [];
-        return v
-      })
-    )
+    return this.usersService.find(dto);
   }
 
   @Get(':id')

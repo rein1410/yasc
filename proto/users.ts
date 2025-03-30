@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.0
 //   protoc               v5.27.1
-// source: proto/user.proto
+// source: proto/users.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";

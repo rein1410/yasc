@@ -17,11 +17,6 @@ message pRegisterDto {
   string password = 3;
 }
 
-message pUserPaginationDto  {
-  int32 limit = 1;
-  int32 skip = 2;
-}
-
 service AuthService {
   rpc login(pLoginDto) returns (pTokenResponse) {}
   rpc register(pRegisterDto) returns (pTokenResponse) {}

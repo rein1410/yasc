@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { protobufPackage } from 'proto/users';
+import { protobufPackage, USER_PACKAGE_NAME } from 'proto/users';
 import { UsersController } from './users.controller';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'USER_PACKAGE',
+        name: USER_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
           package: protobufPackage,
@@ -18,6 +18,6 @@ import { UsersController } from './users.controller';
       },
     ]),
   ],
-  controllers: [UsersController]
+  controllers: [UsersController],
 })
 export class UsersModule {}

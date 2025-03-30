@@ -32,7 +32,7 @@ services:
     command: ["/app/dist/apps/gateway/main.js"]
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.production
     deploy:
       labels:
         - traefik.http.routers.yasc-gateway.rule=Host(`gateway.localhost`)
@@ -44,7 +44,7 @@ services:
     command: ["/app/dist/apps/users/main.js"]
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.production
     deploy:
       labels:
         - traefik.http.routers.yasc-users.rule=Host(`users.localhost`)

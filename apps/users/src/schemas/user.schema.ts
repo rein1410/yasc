@@ -10,13 +10,16 @@ export type UserDocument = HydratedDocument<User>;
 })
 export class User implements pUser {
 
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
+
   @Expose()
   id: string;
 
   @Prop()
   @Expose()
   email: string;
-
 
   @Prop()
   @Expose()

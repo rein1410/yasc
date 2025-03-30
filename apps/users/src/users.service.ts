@@ -4,6 +4,7 @@ import {  pCreateUserDto, pUserByEmail, pUserById, pUserPaginationDto, UsersServ
 import { Observable } from 'rxjs';
 import { User } from './schemas/user.schema';
 import { Model, Query } from 'mongoose';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,8 @@ export class UsersService {
   }
 
   async findOneByEmail(request: pUserByEmail): Promise<User> {
-    return this.userModel.findOne(request);
+    const entity = await this.userModel.findOne(request).exec();
+    return entity;
   }
 
   async find(request: pUserPaginationDto): Promise<User[]> {

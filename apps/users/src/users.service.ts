@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {  pCreateUserDto, pUserByEmail, pUserById, pUserPaginationDto, UsersServiceClient } from 'proto/user';
+import {  pCreateUserDto, pUserByEmail, pUserById, pUserPaginationDto, UsersServiceClient } from 'proto/users';
 import { Observable } from 'rxjs';
 import { User } from './schemas/user.schema';
 import { Model, Query } from 'mongoose';

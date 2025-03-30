@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, OnModuleInit, Inject, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/user';
+import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/users';
 import { ClientGrpc } from '@nestjs/microservices';
 import { CreateUserDto, UpdateUserDto, UserPaginationDto } from './dto';
 import { User } from 'apps/users/src/schemas/user.schema';

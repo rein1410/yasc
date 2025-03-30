@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { pUserPaginationDto } from "proto/user";
+import { pUserPaginationDto } from "proto/users";
 
 
 export class UserPaginationDto implements pUserPaginationDto {

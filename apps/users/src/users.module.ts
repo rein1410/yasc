@@ -3,11 +3,12 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb://nestjs:supersecret@localhost:27017/user?authSource=admin',
+      process.env.MONGO_CONNECTION_STRING || 'mongodb://nestjs:supersecret@localhost:27017/user?authSource=admin',
     ),
     MongooseModule.forFeature([
       {
@@ -15,6 +16,10 @@ import { User, UserDocument } from './schemas/user.schema';
         schema: UserDocument,
       },
     ]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      ignoreEnvFile: true,
+    }),
   ],
   controllers: [UsersController],
   providers: [UsersService],

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Exclude, Expose } from 'class-transformer';
 import { HydratedDocument } from 'mongoose';
-import { pUser } from 'proto/user';
+import { pUser } from 'proto/users';
 
 export type UserDocument = HydratedDocument<User>;
 

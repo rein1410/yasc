@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package auth;
+
+message pTokenResponse {
+  string accessToken = 1;
+}
+
+message pLoginDto {
+  string email = 1;
+  string password = 2;
+}
+
+message pRegisterDto {
+  string email = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message pUserPaginationDto  {
+  int32 limit = 1;
+  int32 skip = 2;
+}
+
+service AuthService {
+  rpc login(pLoginDto) returns (pTokenResponse) {}
+  rpc register(pRegisterDto) returns (pTokenResponse) {}
+}

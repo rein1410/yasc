@@ -1,8 +1,7 @@
 import { ClassSerializerInterceptor, Controller, Get, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { pCreateUserDto, pUser, pUserByEmail, pUserById, pUserPaginationDto, pUsers, UsersServiceController, UsersServiceControllerMethods } from 'proto/user';
+import { pCreateUserDto, pUser, pUserByEmail, pUserById, pUserPaginationDto, pUsers, UsersServiceController, UsersServiceControllerMethods } from 'proto/users';
 import { Observable } from 'rxjs';
-import { GrpcMethod } from '@nestjs/microservices';
 import { User } from './schemas/user.schema';
 import { plainToInstance } from 'class-transformer';
 

@@ -5,8 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.set("trust proxy", "loopback");
-
+  app.set('trust proxy', true);
   const config = new DocumentBuilder()
     .setTitle('YASC')
     .setDescription('YASC API Gateway')

@@ -1,8 +1,17 @@
 services:
   traefik:
     image: traefik:v3.2
+    command: --api.insecure=true --providers.swarm
     ports:
-      - 80:80
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -18,19 +27,28 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=nestjs
       - MONGO_INITDB_ROOT_PASSWORD=supersecret
 
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: ["./dist/apps/gateway/main.js"]
-    image: nestjs-backend
+  gateway:
+    image: yasc-gateway
+    command: ["/app/dist/apps/gateway/main.js"]
     restart: unless-stopped
-    networks:
-      - nestjs_network
+    env_file:
+      - .env
     deploy:
       labels:
-        - traefik.http.routers.backend.rule=Host(`backend.localhost`)
-        - traefik.http.services.m-backend.loadbalancer.server.port=3000
+        - traefik.http.routers.yasc-gateway.rule=Host(`gateway.localhost`)
+        - traefik.http.services.yasc-gateway.loadbalancer.server.port=3000
+
+  users:
+    image: yasc-users
+    hostname: users
+    command: ["/app/dist/apps/users/main.js"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    deploy:
+      labels:
+        - traefik.http.routers.yasc-users.rule=Host(`users.localhost`)
+        - traefik.http.services.yasc-users.loadbalancer.server.port=3001
 
 volumes:
   nestjs_mongo_data1:

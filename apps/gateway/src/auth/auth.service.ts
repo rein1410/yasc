@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/user';
+import { USERS_SERVICE_NAME, UsersServiceClient } from 'proto/users';
 
 @Injectable()
 export class AuthService {
@@ -25,3 +25,4 @@ export class AuthService {
       });
   }
 }
+

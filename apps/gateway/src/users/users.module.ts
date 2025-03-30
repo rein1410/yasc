@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './users.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { protobufPackage } from 'proto/user';
+import { protobufPackage } from 'proto/users';
+import { UsersController } from './users.controller';
 
 @Module({
   imports: [
@@ -12,8 +12,8 @@ import { protobufPackage } from 'proto/user';
         transport: Transport.GRPC,
         options: {
           package: protobufPackage,
-          protoPath: join(__dirname, '../../../proto/user.proto'),
-          url: '0.0.0.0:3001',
+          protoPath: join(__dirname, '../../../proto/users.proto'),
+          url: process.env.USERS_URL || '0.0.0.0:3001',
         },
       },
     ]),

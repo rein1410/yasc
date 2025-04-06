@@ -12,15 +12,16 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   USER_PACKAGE_NAME,
   USERS_SERVICE_NAME,
   UsersServiceClient,
 } from 'proto/users';
 import { ClientGrpc } from '@nestjs/microservices';
-import { CreateUserDto, UpdateUserDto, UserPaginationDto } from './dto';
+import { CreateUserDto, PaginationDto, SortOption, UpdateUserDto } from './dto';
 import { map } from 'rxjs';
+import { pPaginationRequest } from 'proto/common';
 
 @Controller('users')
 @ApiTags('users')
@@ -40,7 +41,7 @@ export class UsersController implements OnModuleInit {
   }
 
   @Get()
-  async find(@Query() dto: UserPaginationDto) {
+  async find(@Query() dto: PaginationDto) {
     return this.usersService.find(dto);
   }
 

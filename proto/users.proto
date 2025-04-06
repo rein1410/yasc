@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "./common.proto";
 package user;
 
 message pUser {
@@ -10,25 +11,19 @@ message pUser {
   string profilePicture = 5;
 }
 
-message pUsers {
+message pUsersList {
   repeated pUser data = 1;
   int32 total = 2;
-  int32 skip = 3;
+  int32 page = 3;
   int32 limit = 4;
 }
 
-message pUserPaginationDto  {
-  int32 limit = 1;
-  int32 skip = 2;
-}
-
 service UsersService {
-  rpc find(pUserPaginationDto) returns (pUsers) {}
+  rpc find(common.pPaginationRequest) returns (pUsersList) {}
   rpc findOne(pUserById) returns (pUser) {}
   rpc findOneByEmail(pUserByEmail) returns (pUser) {}
   rpc create(pCreateUserDto) returns (pUser) {}
 }
-
 
 message pCreateUserDto {
   string email = 1;

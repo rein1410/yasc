@@ -1,3 +1,3 @@
 export * from './create-user.dto';
 export * from './update-user.dto';
-export * from './user-pagination.dto';
+export * from '../../../../../libs/common/src/dtos/pagination.dto';

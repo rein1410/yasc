@@ -24,7 +24,11 @@ function MongooseClassSerializerInterceptor(
       if (Array.isArray(response)) {
         return response.map(this.changePlainObjectToClass);
       }
- 
+      if (Array.isArray(response.data)) {
+        response.data = response.data.map(
+          this.changePlainObjectToClass,
+        );
+      } 
       return this.changePlainObjectToClass(response);
     }
  

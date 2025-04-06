@@ -1,15 +1,16 @@
+import { PaginationService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {  pCreateUserDto, pUserByEmail, pUserById, pUserPaginationDto, UsersServiceClient } from 'proto/users';
-import { Observable } from 'rxjs';
+import { Model } from 'mongoose';
+import { pPaginationRequest } from 'proto/common';
+import { pCreateUserDto, pUserByEmail, pUserById, pUsersList } from 'proto/users';
 import { User } from './schemas/user.schema';
-import { Model, Query } from 'mongoose';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
 
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>,
+private paginationService: PaginationService) {}
 
   async create(request: pCreateUserDto): Promise<User> {
     return this.userModel.create(request);
@@ -23,7 +24,11 @@ export class UsersService {
     return entity;
   }
 
-  async find(request: pUserPaginationDto): Promise<User[]> {
-    return this.userModel.find().skip(request.skip).limit(request.limit).exec();
+  async find(request: pPaginationRequest): Promise<pUsersList> {
+    const res = await this.paginationService.findAllAndCount(
+      this.userModel,
+      request,
+    );
+    return res;
   }
 }

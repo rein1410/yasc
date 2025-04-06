@@ -4,9 +4,11 @@ import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { ConfigModule } from '@nestjs/config';
+import { CommonModule } from '@app/common';
 
 @Module({
   imports: [
+    CommonModule,
     MongooseModule.forRoot(
       process.env.MONGO_CONNECTION_STRING || 'mongodb://nestjs:supersecret@localhost:27017/user?authSource=admin',
     ),

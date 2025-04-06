@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CommonService } from './common.service';
+import { PaginationService } from './pagination.service';
 
 describe('CommonService', () => {
-  let service: CommonService;
+  let service: PaginationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CommonService],
+      providers: [PaginationService],
     }).compile();
 
-    service = module.get<CommonService>(CommonService);
+    service = module.get<PaginationService>(PaginationService);
   });
 
   it('should be defined', () => {

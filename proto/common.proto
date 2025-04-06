@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package common;
+
+message pPaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  // Sorting
+  repeated SortOption sortBy = 3;
+  // Filtering
+  repeated FilterOption filters = 4;
+}
+
+message SortOption {
+  string field = 1;
+  SortDirection direction = 2;
+}
+
+enum SortDirection {
+  ASCENDING = 0;
+  DESCENDING = 1;
+}
+
+message FilterOption {
+  string field = 1;
+  FilterOperator operator = 2;
+  string value = 3;
+}
+
+enum FilterOperator {
+  EQUALS = 0;
+  NOT_EQUALS = 1;
+  GREATER_THAN = 2;
+  LESS_THAN = 3;
+  CONTAINS = 4;
+  IN = 5;
+}
